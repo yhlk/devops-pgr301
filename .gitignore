@@ -1,17 +1,20 @@
-# Terraform
-.terraform/
-*.tfstate
-*.tfstate.backup
-*.lock.hcl
-tfplan
-lambda.zip
+# Ignore Terraform state and lock files
+infra/terraform/.terraform/
+infra/terraform/terraform.tfstate
+infra/terraform/terraform.tfstate.backup
+infra/terraform/.terraform.lock.hcl
 
-# Ignore Terraform provider binaries
+# Ignore Terraform provider cache
 infra/terraform/providers/
 
+# Ignore zip files and other unnecessary binaries
+infra/lambda/*.zip
+infra/lambda/lambda_sqs.zip
 
-# Target folder
-/java_sqs_client/target/
+# Target files or directories
+infra/lambda/target/
 
-# Apache Maven binary
-/java_sqs_client/apache-maven-3.9.5-bin.tar.gz
+# Optional: Ignore all `.zip` and binary files globally
+*.zip
+*.bin
+*.tar.gz
