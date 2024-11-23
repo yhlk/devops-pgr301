@@ -1,7 +1,7 @@
 provider "aws" {
   region     = "eu-west-1"
-  access_key = "AKIATR3Y72NIZCQ2WJK6"
-  secret_key = "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"
+  access_key = "AKIATR3Y72NI5E2TSO7R"
+  secret_key = "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"
 }
 
 # SQS Queue
