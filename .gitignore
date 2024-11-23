@@ -14,8 +14,5 @@ infra/lambda/lambda_sqs.zip
 # Target files or directories
 infra/lambda/target/
 
-# Optional: Ignore all `.zip` and binary files globally
-*.zip
-*.bin
-*.tar.gz
+
 infra/.terraform/
