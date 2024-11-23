@@ -3,6 +3,7 @@ name: Terraform Deployment Workflow
 on:
   push:
     branches:
+      - main
       - "*"  # Trigger for any branch push
 
 jobs:
