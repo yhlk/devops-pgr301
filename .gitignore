@@ -18,3 +18,4 @@ infra/lambda/target/
 *.zip
 *.bin
 *.tar.gz
+infra/.terraform/
