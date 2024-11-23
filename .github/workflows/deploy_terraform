@@ -1,20 +1,19 @@
-name: Terraform Deployment
+name: Universal Deployment Workflow
 
 on:
   push:
     branches:
       - main
-      - "*"
+      - "*"  # Trigger on any branch
 
 jobs:
   terraform:
-    name: Deploying terraform
+    name: Deploy Terraform
     runs-on: ubuntu-latest
 
     permissions:
       id-token: write
       contents: read
-      actions: write
 
     steps:
       - name: Check out repository
@@ -33,18 +32,56 @@ jobs:
           aws-region: eu-west-1
 
       - name: Initialize Terraform
+        if: github.ref_name == 'terraform'
         run: |
           cd infra
           terraform init
 
       - name: Terraform Plan
-        if: startsWith(github.ref, 'refs/heads/') && github.ref != 'refs/heads/main'
+        if: github.ref_name == 'terraform'
         run: |
           cd infra
           terraform plan
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main'
+        if: github.ref_name == 'main'
         run: |
           cd infra
           terraform apply -auto-approve
+
+  sam-deployment:
+    name: Deploy SAM Application
+    needs: terraform  # Wait for Terraform deployment to finish
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Install AWS SAM CLI
+        run: |
+          pip install aws-sam-cli
+          sam --version
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
+
+      - name: Build SAM Application
+        if: github.ref_name == 'main'
+        run: |
+          cd sam-app
+          sam build
+
+      - name: Deploy SAM Application
+        if: github.ref_name == 'main'
+        run: |
+          cd sam-app
+          sam deploy --no-confirm-changeset --stack-name sam-app-stack --region eu-west-1 --capabilities CAPABILITY_IAM
