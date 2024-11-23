@@ -1,12 +1,15 @@
-#Terraform
+# Terraform
 .terraform/
-terraform.tfstate
-terraform.tfstate.backup
-.terraform.lock.hcl
+*.tfstate
+*.tfstate.backup
+*.lock.hcl
 tfplan
 lambda.zip
 
-#Target 
+# Ignore Terraform provider binaries
+infra/terraform/providers/
+
+# Target folder
 /java_sqs_client/target/
 
 # Apache Maven binary
