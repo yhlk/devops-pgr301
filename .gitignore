@@ -9,6 +9,7 @@ lambda.zip
 # Ignore Terraform provider binaries
 infra/terraform/providers/
 
+
 # Target folder
 /java_sqs_client/target/
 
