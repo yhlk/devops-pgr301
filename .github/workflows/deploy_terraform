@@ -1,0 +1,49 @@
+name: Terraform Deployment
+
+on:
+  push:
+    branches:
+      - main
+      - "*"
+
+jobs:
+  terraform:
+    name: Deploying terraform
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.9.0
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
+
+      - name: Initialize Terraform
+        run: |
+          cd infra
+          terraform init
+
+      - name: Terraform Plan
+        if: github.ref != 'refs/heads/main'
+        run: |
+          cd infra
+          terraform plan
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        run: |
+          cd infra
+          terraform apply -auto-approve
