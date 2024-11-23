@@ -14,6 +14,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
+      actions: write
 
     steps:
       - name: Check out repository
@@ -37,7 +38,7 @@ jobs:
           terraform init
 
       - name: Terraform Plan
-        if: github.ref != 'refs/heads/main'
+        if: startsWith(github.ref, 'refs/heads/') && github.ref != 'refs/heads/main'
         run: |
           cd infra
           terraform plan
