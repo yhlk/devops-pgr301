@@ -11,7 +11,7 @@ Vi opprettet en serverless-applikasjon som genererer bilder basert på tekstprom
 
 ### 1. Opprettelse av prosjekt
 For å starte et nytt prosjekt, brukte vi `sam init`:
-```bash
+
 sam init
 
 Valg under init-prosessen:
