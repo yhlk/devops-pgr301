@@ -23,7 +23,7 @@ Resources:
   GenerateImageFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./  # Points to the root directory where application.py is located
+      CodeUri: .
       Handler: application.lambda_handler
       Runtime: python3.8
       Timeout: 15
@@ -47,3 +47,9 @@ Resources:
               - bedrock:InvokeModel
             Resource:
               - arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-image-generator-v1
+    Metadata:
+      BuildMethod: python3.8
+      Exclude:
+        - infra/*
+        - java_sqs_client/*
+        - images/*

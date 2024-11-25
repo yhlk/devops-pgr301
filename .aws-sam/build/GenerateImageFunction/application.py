@@ -99,3 +99,4 @@ def lambda_handler(event, context):
             "image_url": image_url
         })
     }
+print("Debugging deployment")

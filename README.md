@@ -50,44 +50,138 @@ curl -X POST https://opypl77il0.execute-api.eu-west-1.amazonaws.com/Prod/generat
 -H "Content-Type: application/json" \
 -d '{"prompt": "A croissant"}'
 
-✨ Eksempelbilder
-## Eksempelbilder
-
-### Steg 1: Kjøring av `curl`-kommando
-Vi brukte en `curl`-kommando til å gjøre en POST-forespørsel til API Gateway for å generere et bilde. Dette er et eksempel på responsen vi mottok:
-
-![Curl Kommando](images/curl_command_example.png)
-
----
-
-### Steg 2: Sjekk av API Gateway-konfigurasjon
-Dette er en visning av API Gateway som håndterer forespørselen vår til `/generate`-endepunktet:
-
-![API Gateway](images/api_gateway_config.png)
-
----
-
-### Steg 3: Lagrede bilder i S3 Bucket
-De genererte bildene ble lagret i en Amazon S3 Bucket. Her er en visning av S3 Bucket:
-
-![S3 Bucket](images/s3_bucket_view.png)
-
----
-
-### Steg 4: Generert bilde
-Dette er et eksempel på et generert bilde, lagret i S3:
-
-![Generert Bilde](images/generated_image_example.png)
 
 
 
-#Oppgave 2
+# Oppgave 2: Infrastruktur med Terraform og SQS
+Kommandoer vi brukte
+
+    terraform init
+    Initialiserte Terraform-prosjektet og konfigurerte backend for lagring av state-fil i S3-bucketen pgr301-2024-terraform-state.
+
+    terraform validate
+    Validerte at Terraform-koden var syntaktisk korrekt og klar for bruk.
+
+    terraform plan
+    Genererte en plan for infrastrukturen som viste hvilke ressurser som ville bli opprettet, endret eller slettet.
+
+    terraform apply
+    Implementerte endringene ved å opprette, endre eller fjerne ressurser i AWS basert på Terraform-koden.
+
+A. Infrastruktur som kode
+
+For å løse ytelsesproblemene brukte vi Amazon SQS som mellomledd mellom klientene og bildeprosesseringskoden. Dette sikret en mer skalerbar løsning. Vi utførte følgende steg:
+
+    Terraform-konfigurasjon for Lambda og SQS:
+        Opprettet en Lambda-funksjon som behandler meldinger fra SQS-køen.
+        Konfigurerte en SQS-kø som mellomledd mellom klient og bildebehandlingsfunksjonen.
+        Integrerte Lambda-funksjonen med SQS for asynkron behandling.
+        Opprettet nødvendige IAM-roller og policyer for Lambda-funksjonen:
+            Lesetilgang til SQS.
+            Skrivetilgang til S3-bucketen pgr301-couch-explorers.
+        Lagret Terraform state-filen i S3-bucketen pgr301-2024-terraform-state.
+
+    Lagring i S3:
+        Lambda-funksjonen ble konfigurert til å laste opp genererte bilder til S3-bucketen pgr301-couch-explorers/images.
+
+    Timeout-konfigurasjon:
+        Justerte Lambda-funksjonens timeout til 10 sekunder for å håndtere lengre prosesseringstider.
+
+B. GitHub Actions Workflow for Terraform
+
+For å automatisere deploy av infrastrukturen brukte vi GitHub Actions. Workflowen ble satt opp med følgende regler:
+
+    Hovedbranch (main):
+        Workflow kjører terraform apply for å oppdatere infrastrukturen automatisk med endringene.
+
+    Feature branches (testing-terraform):
+        Workflow kjører terraform plan for å vise en plan for infrastrukturendringer uten å implementere dem.
+
+Leveranser
+
+    Lenker til workflow-kjøringer:
+        Workflow-kjøring med terraform apply på main: https://github.com/yhlk/devops-pgr301/actions/runs/12016974033
+        Workflow-kjøring med terraform plan på andre brancher: https://github.com/yhlk/devops-pgr301/actions/runs/11988700165
+    SQS URL: URL-en til den opprettede SQS-køen for testing av meldinger: https://sqs.eu-west-1.amazonaws.com/244530008913/taelqueue
+
+# Oppgave 3: Javaklient og Docker
+A. Docker-image for SQS-klienten
+
+For å forenkle bruken av SQS-klienten uten behov for å installere Java lokalt, opprettet vi et Docker-image. Her er prosessen vi fulgte:
+
+    Pull av Docker-imaget
+    Teamet kan enkelt hente imaget fra Docker Hub ved å bruke følgende kommando:
+
+docker pull tael002/java-sqs-client-tael002:latest
+
+Opprettelse av Dockerfile
+Vi brukte en multi-stage build for å optimalisere Docker-imaget:
+
+    Første stage:
+        Kompilerte Java-koden ved hjelp av Maven.
+        Bygde en JAR-fil fra koden.
+    Andre stage:
+        Kopierte nødvendig output fra første stage.
+        Kjørte applikasjonen i et lettvekts runtime-miljø som openjdk:17-jre-slim.
+
+Testing av Docker-imaget
+Vi testet Docker-imaget ved å sende meldinger til SQS-køen.
+Kommando for testing:
+
+    docker run \
+        -e AWS_ACCESS_KEY_ID=AKIATR3Y72NI5E2TSO7R \
+        -e AWS_SECRET_ACCESS_KEY=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 \
+        -e SQS_QUEUE_URL=https://sqs.eu-west-1.amazonaws.com/244530008913/taelqueue \
+        tael002/java-sqs-client-tael002 "Me on top of a pyramid"
+
+B. GitHub Actions Workflow for Docker
+
+For å automatisere bygging og publisering av Docker-imaget opprettet vi en GitHub Actions workflow. Denne sikret at teamet alltid hadde tilgang til oppdatert funksjonalitet.
+
+    Trigger for workflowen
+        Workflow kjører automatisk ved hver push til main.
+        Endringer i main resulterer i en oppdatert versjon av Docker-imaget.
+
+    Publisering til Docker Hub
+        Vi konfigurerte en Docker Hub-konto for å motta publiserte images.
+        Workflow logger inn på Docker Hub, bygger imaget, og pusher det automatisk.
+
+    Tagging-strategi
+        Latest tag:
+        Imaget tagges alltid med latest for enkel tilgang til den nyeste versjonen.
+        Versjonskontroll:
+        Imaget tagges også med spesifikke versjonsnummer (f.eks. 1.0.0) for historikk og kontroll.
+
+Leveranser
+
+    Docker Hub Image:
+
+docker pull tael002/java-sqs-client-tael002:latest
+
+Kommando for testing:
+For å teste funksjonaliteten, kjør følgende kommando:
+
+// vet at man ikke skal dele access key og secret key, men viser det som eksempel her kun for sensor
+    docker run \
+        -e AWS_ACCESS_KEY_ID=AKIATR3Y72NI5E2TSO7R \
+        -e AWS_SECRET_ACCESS_KEY=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 \
+        -e SQS_QUEUE_URL=https://sqs.eu-west-1.amazonaws.com/244530008913/taelqueue \
+        tael002/java-sqs-client-tael002 "Me on top of a pyramid"
+
+Denne prosessen sikret enkel bruk og rask distribusjon av klienten
+
+# Oppgave 4: Metrics og overvåkning
+A. CloudWatch-alarm for OldestMessageAlarm_TaelQueue
+
+For å overvåke løsningen og sikre rask tilbakemelding, satte jeg opp en CloudWatch-alarm basert på SQS-metrikken ApproximateAgeOfOldestMessage.
+
+    Terraform-kode:
+        Alarmen trigges når verdien overstiger en angitt terskel i mitt tilfelle 120.
+        E-postvarsling er satt opp via Amazon SNS. E-postadressen spesifiseres som en variabel i Terraform-koden. Brukte student-eposten.
 
 
-#Oppgave 3
 
 
-#Oppgave 4
 
 
 

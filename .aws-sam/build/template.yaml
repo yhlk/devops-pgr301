@@ -47,4 +47,9 @@ Resources:
           Resource:
           - arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-image-generator-v1
     Metadata:
+      BuildMethod: python3.8
+      Exclude:
+      - infra/*
+      - java_sqs_client/*
+      - images/*
       SamResourceId: GenerateImageFunction

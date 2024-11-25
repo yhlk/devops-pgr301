@@ -1,0 +1,6 @@
+infra/**
+images/**
+java_sqs_client/**
+README.md
+requirements.txt
+*.dist-info/
