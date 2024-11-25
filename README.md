@@ -51,10 +51,33 @@ curl -X POST https://opypl77il0.execute-api.eu-west-1.amazonaws.com/Prod/generat
 -d '{"prompt": "A croissant"}'
 
 ✨ Eksempelbilder
-![Curl Kommando](images\\curl_command_example.png)
-![API Gateway](images\\api_gateway_config.png)
-![S3 Bucket](images\\s3_bucket_view.png)
-![Generert Bilde](images\\generated_image_example.png)
+## Eksempelbilder
+
+### Steg 1: Kjøring av `curl`-kommando
+Vi brukte en `curl`-kommando til å gjøre en POST-forespørsel til API Gateway for å generere et bilde. Dette er et eksempel på responsen vi mottok:
+
+![Curl Kommando](images/curl_command_example.png)
+
+---
+
+### Steg 2: Sjekk av API Gateway-konfigurasjon
+Dette er en visning av API Gateway som håndterer forespørselen vår til `/generate`-endepunktet:
+
+![API Gateway](images/api_gateway_config.png)
+
+---
+
+### Steg 3: Lagrede bilder i S3 Bucket
+De genererte bildene ble lagret i en Amazon S3 Bucket. Her er en visning av S3 Bucket:
+
+![S3 Bucket](images/s3_bucket_view.png)
+
+---
+
+### Steg 4: Generert bilde
+Dette er et eksempel på et generert bilde, lagret i S3:
+
+![Generert Bilde](images/generated_image_example.png)
 
 
 
