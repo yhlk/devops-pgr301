@@ -1,5 +1,10 @@
 ## Eksamen devops 2024
 
+## Beskjed til lærer: rett før jeg skulle levere eksamen fikk jeg en access denied melding opp. Dette førte til at deployingen min ikke fungerte som den skulle.
+Deployment har jeg fått til flere ganger, og feilen skyldes blant annet error 403 i terraform og ValidationError i Sam. Begge er access denied.
+Se tidligere deployment, der vil du klart se at det funker. 
+
+
 # Oppgave 1: Generere og deploye en serverless-applikasjon med SAM
 
 ## 🛠️ Mål
