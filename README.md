@@ -51,37 +51,31 @@ curl -X POST https://opypl77il0.execute-api.eu-west-1.amazonaws.com/Prod/generat
 -d '{"prompt": "A croissant"}'
 
 ✨ Eksempelbilder
-
-# Oppgave 1: Generering av bilder med SAM-applikasjon
-
-Denne oppgaven viser hvordan vi brukte en serverless arkitektur ved hjelp av AWS SAM til å generere bilder. Her er stegene vi fulgte, illustrert med bilder.
-
-## Steg 1: Kjøring av `curl`-kommando
+### Steg 1: Kjøring av `curl`-kommando
 Vi brukte en `curl`-kommando til å gjøre en POST-forespørsel til API Gateway for å generere et bilde. Dette er et eksempel på responsen vi mottok:
 
-![Curl Kommando](images/Screenshot%202024-11-25%20185957.png)
+![Curl Kommando](images/Screenshot%2024-11-25%20185957.png)
 
 ---
 
-## Steg 2: Sjekk av API Gateway-konfigurasjon
+### Steg 2: Sjekk av API Gateway-konfigurasjon
 Dette er en visning av API Gateway som håndterer forespørselen vår til `/generate`-endepunktet:
 
-![API Gateway](images/Screenshot%202024-11-25%20190025.png)
+![API Gateway](images/Screenshot%2024-11-25%20190025.png)
 
 ---
 
-## Steg 3: Lagrede bilder i S3 Bucket
+### Steg 3: Lagrede bilder i S3 Bucket
 De genererte bildene ble lagret i en Amazon S3 Bucket. Her er en visning av S3 Bucket:
 
-![S3 Bucket](images/Screenshot%202024-11-25%20190130.png)
+![S3 Bucket](images/Screenshot%2024-11-25%20190130.png)
 
 ---
 
-## Steg 4: Generert bilde
+### Steg 4: Generert bilde
 Dette er et eksempel på et generert bilde, lagret i S3:
 
-![Generert Bilde](images/Screenshot%202024-11-25%20190156.png)
-
+![Generert Bilde](images/Screenshot%2024-11-25%20190156.png)
 
 
 #Oppgave 2
