@@ -1,6 +1,87 @@
-##Eksamen devops 2024
+## Eksamen devops 2024
 
-#Oppgave 1
+# Oppgave 1: Generere og deploye en serverless-applikasjon med SAM
+
+## 🛠️ Mål
+Vi opprettet en serverless-applikasjon som genererer bilder basert på tekstprompts ved hjelp av **AWS Lambda** og **AWS SAM**.
+
+---
+
+## 🚀 Trinn-for-trinn-guide
+
+### 1. Opprettelse av prosjekt
+For å starte et nytt prosjekt, brukte vi `sam init`:
+```bash
+sam init
+
+Valg under init-prosessen:
+
+   - Template: AWS Quick Start Templates
+   - Runtime: Python 3.8
+   - Application name: sam-app-tael002
+
+2. Implementasjon av Lambda-funksjonen
+
+Lambda-funksjonen ble implementert i application.py. Den tar imot tekstprompts og genererer bilder ved hjelp av Bedrock-modellen. Genererte bilder lastes opp til en S3-bucketen vi har tilgjengelig fra lærer.
+
+3. Bygging av applikasjonen
+
+For å bygge applikasjonen kjørte vi:
+
+sam build
+
+4. Deploy av applikasjonen
+
+Deploy ble gjennomført ved hjelp av sam deploy --guided:
+
+sam deploy --guided
+
+Under deploy spesifiserte vi nødvendige parametere som:
+
+    BucketName: pgr301-couch-explorers
+    KandidatNr: 18
+    region: eu-west-1
+
+5. Testing av applikasjonen
+
+Etter deploy sendte vi POST-forespørsler til API Gateway for å teste funksjonaliteten:
+
+curl -X POST https://opypl77il0.execute-api.eu-west-1.amazonaws.com/Prod/generate \
+-H "Content-Type: application/json" \
+-d '{"prompt": "A croissant"}'
+
+✨ Eksempelbilder
+
+# Oppgave 1: Generering av bilder med SAM-applikasjon
+
+Denne oppgaven viser hvordan vi brukte en serverless arkitektur ved hjelp av AWS SAM til å generere bilder. Her er stegene vi fulgte, illustrert med bilder.
+
+## Steg 1: Kjøring av `curl`-kommando
+Vi brukte en `curl`-kommando til å gjøre en POST-forespørsel til API Gateway for å generere et bilde. Dette er et eksempel på responsen vi mottok:
+
+![Curl Kommando](images/Screenshot%202024-11-25%20185957.png)
+
+---
+
+## Steg 2: Sjekk av API Gateway-konfigurasjon
+Dette er en visning av API Gateway som håndterer forespørselen vår til `/generate`-endepunktet:
+
+![API Gateway](images/Screenshot%202024-11-25%20190025.png)
+
+---
+
+## Steg 3: Lagrede bilder i S3 Bucket
+De genererte bildene ble lagret i en Amazon S3 Bucket. Her er en visning av S3 Bucket:
+
+![S3 Bucket](images/Screenshot%202024-11-25%20190130.png)
+
+---
+
+## Steg 4: Generert bilde
+Dette er et eksempel på et generert bilde, lagret i S3:
+
+![Generert Bilde](images/Screenshot%202024-11-25%20190156.png)
+
 
 
 #Oppgave 2

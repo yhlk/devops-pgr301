@@ -22,8 +22,8 @@ variable "lambda_s3_key" {
   default     = "lambda/lambda_sqs.zip"
 }
 
-variable "image_s3_bucket" {
-  description = "S3 bucket for genererte bilder"
-  type        = string
-  default     = "generated-images-bucket"
+variable "alarm_email" {
+  description = "Email address for receiving CloudWatch alarm alerts"
+  type = string
+  default = "tael002@student.kristiania.no"
 }
