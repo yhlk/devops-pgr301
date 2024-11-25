@@ -51,10 +51,11 @@ curl -X POST https://opypl77il0.execute-api.eu-west-1.amazonaws.com/Prod/generat
 -d '{"prompt": "A croissant"}'
 
 ✨ Eksempelbilder
-![Curl Kommando](images/Screenshot_2024-11-25_185957.png)
-![API Gateway](images/Screenshot_2024-11-25_190025.png)
-![S3 Bucket](images/Screenshot_2024-11-25_190130.png)
-![Generert Bilde](images/Screenshot_2024-11-25_190156.png)
+![Curl Kommando](images/curl_command_example.png)
+![API Gateway](images/api_gateway_config.png)
+![S3 Bucket](images/s3_bucket_view.png)
+![Generert Bilde](images/generated_image_example.png)
+
 
 
 #Oppgave 2
