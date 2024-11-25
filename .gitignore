@@ -16,3 +16,6 @@ infra/lambda/target/
 
 
 infra/.terraform/
+
+/java_sqs_client/target
+/java_sqs_client/apache-maven-3.2.5-bin.tar.gz
